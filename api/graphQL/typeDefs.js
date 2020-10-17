@@ -8,6 +8,7 @@ type Post {
     username:String!        
 }
 type Query {
-    getPosts: [Post]
+    getPosts: [Post],
+    getPost(postId: ID!): Post
 }
 `
