@@ -1,24 +1,38 @@
 const { ApolloServer } = require('apollo-server')
-const gql = require('graphql-tag')
+const mongoose = require('mongoose')
 
-const port = 3000;
+//graphQL stuff
+const typeDefs = require('./graphQL/typeDefs')
+const resolvers = require('./graphQL/resolvers')
 
-const typeDefs = gql`
-    type Query {
-        sayHi: String!
-    }
-`
-const resolvers = {
-    Query: {
-        sayHi: () => 'Hello World'
+// server port
+const port = 3000
+
+
+// create apollo-express server
+function createServer() {
+    return new ApolloServer({
+        typeDefs,
+        resolvers
+    })
+}
+
+async function init() {
+
+    try {
+        
+        // use container name to connect with database
+        await mongoose.connect('mongodb://mongodb/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
+        console.log('MongoDB Connected')
+
+        // start the server
+        const server = createServer()
+        await server.listen({ port })
+        console.log('server started at 3000')
+
+    } catch (err) {
+        console.log(err)
     }
 }
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers
-})
-
-server.listen({ port }).then(() => {
-    console.log('server started at 3000...')
-})
+init()

@@ -29,13 +29,14 @@ services:
 
   mongodb:
     image: mongo
-    # restart: always    
+    environment:
+      - MONGO_INITDB_DATABASE=mydatabase
+    # restart: always
     container_name: mongodb
     volumes:
       - data-node:/data/db
     ports:
       - 27017:27017
-    command: mongod --noauth
     # logging:
     #   driver: none
     networks:
