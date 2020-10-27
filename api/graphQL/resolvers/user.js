@@ -11,11 +11,8 @@ module.exports = {
         async register(_, { registerUser: { username, email, password, confirmPassword } }) {
 
             try {
-
                 // joi validatation
                 const validations = await validateSchema('registerUser', { username, email, password, confirmPassword })
-                console.log('validations --- \n', validations)
-
             } catch (error) {
                 // looping through multiple joi validation errors
                 errorObj = {}
@@ -25,36 +22,39 @@ module.exports = {
                 })
             }
 
-            // check whether the username already exist in db
-            const existingUser = await User.findOne({ username })
-            if (existingUser) {
-                throw new UserInputError('Username is taken', {
-                    errors: { username: 'This username is taken' }
+            try {
+                // check whether the username already exist in db
+                const existingUser = await User.findOne({ username })
+                if (existingUser) {
+                    throw new UserInputError('Username is taken', {
+                        errors: { username: 'This username is taken' }
+                    })
+                }
+
+                // inserting new User into mongodb
+                password = await bcrypt.hash(password, 12);
+                const newUser = new User({
+                    email,
+                    username,
+                    password,
+                    createdAt: new Date().toISOString()
                 })
+                const res = await newUser.save();
+
+                const token = jwt.sign({
+                    id: res.id,
+                    email: res.email,
+                    username: res.username
+                }, SECRET_KEY, { expiresIn: '1h' })
+
+                return {
+                    ...res._doc,
+                    id: res._id,
+                    token
+                }
+            } catch (error) {
+                throw new Error('Internal Server Error --> registerUser', error)
             }
-
-            // inserting new User into mongodb
-            password = await bcrypt.hash(password, 12);
-            const newUser = new User({
-                email,
-                username,
-                password,
-                createdAt: new Date().toISOString()
-            })
-            const res = await newUser.save();
-
-            const token = jwt.sign({
-                id: res.id,
-                email: res.email,
-                username: res.username
-            }, SECRET_KEY, { expiresIn: '1h' })
-
-            return {
-                ...res._doc,
-                id: res._id,
-                token
-            }
-
         }
     }
 }
