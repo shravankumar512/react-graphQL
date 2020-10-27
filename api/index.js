@@ -13,7 +13,8 @@ const port = 3000
 function createServer() {
     return new ApolloServer({
         typeDefs,
-        resolvers
+        resolvers,
+        context: ({ req }) => ({ req })
     })
 }
 
