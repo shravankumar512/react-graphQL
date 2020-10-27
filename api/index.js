@@ -20,7 +20,7 @@ function createServer() {
 async function init() {
 
     try {
-        
+        console.log('...starting server...')
         // use container name to connect with database
         await mongoose.connect('mongodb://mongodb/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
         console.log('MongoDB Connected')
