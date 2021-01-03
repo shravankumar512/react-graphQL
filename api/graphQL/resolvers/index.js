@@ -1,12 +1,15 @@
-const postResolvers = require('./post')
-const userResolvers = require('./user')
+const postsResolvers = require('./post');
+const commentsReslovers = require('./comment');
+const usersResolvers = require('./user');
+const POST_ADDED = 'POST_ADDED';
 
 module.exports = {
     Query: {
-        ...postResolvers.Query
+        ...postsResolvers.Query
     },
     Mutation: {
-        ...userResolvers.Mutation,
-        ...postResolvers.Mutation
+        ...usersResolvers.Mutation,
+        ...postsResolvers.Mutation,
+        ...commentsReslovers.Mutation
     }
-}
+};
