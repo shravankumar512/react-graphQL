@@ -31,7 +31,7 @@ export default function PostCard({ post: { body, comments, createdAt, id, likes,
                     basic
                     color='teal'
                     icon='comments'
-                    label={{ basic: true, color: 'teal', pointing: 'left', content: likes.length }}
+                    label={{ basic: true, color: 'teal', pointing: 'left', content: comments.length }}
                     onClick={commentOnPost}
                 />
             </Card.Content>
