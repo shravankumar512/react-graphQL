@@ -7,7 +7,7 @@ const resolvers = require('./graphQL/resolvers');
 
 
 // server port
-const port = 3000;
+const port = 5000;
 
 // create apollo-express server
 function createServer() {
