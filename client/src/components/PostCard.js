@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Icon, Image, Label } from 'semantic-ui-react';
+import { Button, Card, Image } from 'semantic-ui-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
