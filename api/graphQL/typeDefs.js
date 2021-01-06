@@ -27,7 +27,7 @@ type User {
     createdAt:String!
     token:String!
 }
-input RegisterUser {
+input RegisterInput {
     username:String!
     password:String!
     confirmPassword:String!
@@ -38,7 +38,7 @@ type Query {
     getPost(postId: ID!): Post
 }
 type Mutation {
-    register(registerUser: RegisterUser): User!
+    register(registerInput: RegisterInput): User!
     login(username:String!, password:String!): User!
     createPost(body:String!): Post!
     deletePost(postId:ID!): String!

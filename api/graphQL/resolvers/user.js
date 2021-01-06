@@ -11,46 +11,46 @@ function generateToken(user) {
         id: user.id,
         email: user.email,
         username: user.username
-    }, SECRET_KEY, { expiresIn: '1h' })
+    }, SECRET_KEY, { expiresIn: '1h' });
 }
 
 module.exports = {
     Mutation: {
         async login(_, { username, password }) {
             // joi validatation
-            await validateSchema('login', { username, password })
+            await validateSchema('login', { username, password });
 
-            const user = await User.findOne({ username })
+            const user = await User.findOne({ username });
             if (!user) {
-                errors = { general: 'User not found' }
-                throw new UserInputError('User not found', { ...errors })
+                errors = { general: 'User not found' };
+                throw new UserInputError('User not found', { errors });
             }
 
             const matchPassword = await bcrypt.compare(password, user.password);
             if (!matchPassword) {
                 errors = { general: 'Wrong Crendetials' };
-                throw new UserInputError('Wrong Crendetials', { ...errors })
+                throw new UserInputError('Wrong Crendetials', { errors });
             }
 
-            const token = generateToken(user)
+            const token = generateToken(user);
 
             return {
                 ...user._doc,
                 id: user._id,
                 token
-            }
+            };
         },
-        async register(_, { registerUser: { username, email, password, confirmPassword } }) {
+        async register(_, { registerInput: { username, email, password, confirmPassword } }) {
 
             // joi validatation
-            await validateSchema('register', { username, email, password, confirmPassword })
+            await validateSchema('register', { username, email, password, confirmPassword });
 
             // check whether the username already exist in db
-            const existingUser = await User.findOne({ username })
+            const existingUser = await User.findOne({ username });
             if (existingUser) {
                 throw new UserInputError('Username is taken', {
                     errors: { username: 'This username is taken' }
-                })
+                });
             }
 
             // inserting new User into mongodb
@@ -60,17 +60,17 @@ module.exports = {
                 username,
                 password,
                 createdAt: new Date().toISOString()
-            })
+            });
             const res = await newUser.save();
 
-            const token = generateToken(res)
+            const token = generateToken(res);
 
             return {
                 ...res._doc,
                 id: res._id,
                 token
-            }
+            };
 
         }
     }
-}
+};

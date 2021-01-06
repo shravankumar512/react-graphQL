@@ -29,7 +29,7 @@ async function init() {
         // start the server
         const server = createServer();
         await server.listen({ port });
-        console.log('server started at 3000');
+        console.log('server started at ', port);
 
     } catch (err) {
         console.log(err);
