@@ -9,18 +9,22 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MenuBar from './components/MenuBar';
+import { AuthProvider } from './context/auth';
+import AuthRoute from './utils/AuthRoute';
 
 function App() {
   return (
-    <Router>
-      <Container>
-        <MenuBar></MenuBar>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/login' component={Login} />
-        <Route exact path='/register' component={Register} />
+    <AuthProvider>
+      <Router>
+        <Container>
+          <MenuBar></MenuBar>
+          <Route exact path='/' component={Home} />
+          <AuthRoute exact path='/login' component={Login} />
+          <AuthRoute exact path='/register' component={Register} />
 
-      </Container>
-    </Router>
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 
