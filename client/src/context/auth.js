@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import jwtDecode from 'jwt-decode';
 
-const JWT_TOKEN = 'jwtToken';
+export const JWT_TOKEN = 'jwtToken';
 
 const initialState = { user: null };
 

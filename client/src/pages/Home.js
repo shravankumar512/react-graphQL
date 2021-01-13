@@ -1,15 +1,19 @@
 import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
-import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import React, { useContext } from 'react';
+import { Grid, Transition } from 'semantic-ui-react';
 import PostCard from '../components/PostCard';
+import PostForm from '../components/PostForm';
+import { AuthContext } from '../context/auth';
+import { FETCH_POSTS_QUERY } from '../utils/graphql';
 
 export default function Home() {
+    let posts = [];
+    const { user } = useContext(AuthContext);
     const { loading, data } = useQuery(FETCH_POSTS_QUERY);
-    if (data) {
-        console.log({ data });
-    }
 
+    if (data) {
+        posts = data.getPosts;
+    }
     return (
         <Grid columns={3} divided>
             <Grid.Row className="page-title">
@@ -18,29 +22,25 @@ export default function Home() {
 
             <Grid.Row>
                 {
+                    user && (
+                        <Grid.Column>
+                            <PostForm />
+                        </Grid.Column>
+                    )
+                }
+                {
                     loading ? (<h1>Loading posts...</h1>) :
-                        (data.getPosts && data.getPosts.map(post => (
-                            <Grid.Column key={post.id} style={{ marginBottom: 20, boxShadow: 'none' }}>
-                                <PostCard post={post} />
-                            </Grid.Column>)
-                        ))
+                        (<Transition.Group>
+                            {posts &&
+                                posts.map(post => (
+                                    <Grid.Column key={post.id} style={{ marginBottom: 20, boxShadow: 'none' }}>
+                                        <PostCard post={post} />
+                                    </Grid.Column>
+                                ))
+                            }
+                        </Transition.Group>)
                 }
             </Grid.Row>
         </Grid>
     );
 }
-
-
-const FETCH_POSTS_QUERY = gql`
-    {
-        getPosts {
-            id body createdAt username
-            likes{
-                username
-            }
-            comments{
-                id username createdAt body
-            }
-        }
-    }
-`;
