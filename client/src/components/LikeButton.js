@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import MyPopup from './MyPopup';
 
 export default function LikeButton({ user, post: { id, likes } }) {
 
@@ -17,22 +18,27 @@ export default function LikeButton({ user, post: { id, likes } }) {
         variables: { postId: id }
     });
 
-    return (
-        user ? (<Button
-            basic={!liked}
-            color='teal'
-            icon='heart'
-            label={{ basic: true, color: 'teal', pointing: 'left', content: likes && likes.length }}
-            onClick={likePost}
-        />) : (<Button
-            basic
-            color='teal'
-            icon='heart'
-            label={{ basic: true, color: 'teal', pointing: 'left', content: likes && likes.length }}
-            as={Link}
-            to="/login"
-        />)
+    const LikeButton = (user ? (<Button
+        basic={!liked}
+        color='teal'
+        icon='heart'
+        label={{ basic: true, color: 'teal', pointing: 'left', content: likes && likes.length }}
+        onClick={likePost}
+    />) : (<Button
+        basic
+        color='teal'
+        icon='heart'
+        label={{ basic: true, color: 'teal', pointing: 'left', content: likes && likes.length }}
+        as={Link}
+        to="/login"
+    />)
     );
+
+    return (
+        <MyPopup content={liked ? "Unlike Post" : "Like Post"}>
+            {LikeButton}
+        </MyPopup>
+    )
 }
 
 
