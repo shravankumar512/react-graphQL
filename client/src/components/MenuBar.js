@@ -48,6 +48,12 @@ export default function MenuBar() {
                         onClick={handleItemClick}
                         as={Link}
                         to='/register' />
+                    <Menu.Item
+                        name='fileupload'
+                        active={activeItem === 'fileupload'}
+                        onClick={handleItemClick}
+                        as={Link}
+                        to='/fileupload' />
                 </Menu.Menu>
             </Menu>
         );

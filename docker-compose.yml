@@ -22,8 +22,8 @@ services:
     volumes:
       - ./api:/api
       - /api/node_modules
-    # depends_on:
-    #   - mongodb
+    depends_on:
+      - mongodb
     networks:
       - webappnetwork
 
