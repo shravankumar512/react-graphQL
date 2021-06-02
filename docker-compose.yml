@@ -1,15 +1,18 @@
 version: "3"
 
 services:
-  client:
+  app:
     build:
       context: ./client
     # restart: always
     ports:
       - 3000:3000
     volumes:
-      - ./client:/client
-      - /client/node_modules
+      - ./client:/code
+      - /code/public
+      - /code/node_modules
+    depends_on: 
+      - api
     networks:
       - webappnetwork
 
@@ -20,8 +23,8 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./api:/api
-      - /api/node_modules
+      - ./api:/code
+      - /code/node_modules
     depends_on:
       - mongodb
     networks:
