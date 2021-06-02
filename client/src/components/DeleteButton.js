@@ -1,22 +1,41 @@
 import { gql, useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { Button, Confirm } from 'semantic-ui-react';
+import { FETCH_POSTS_QUERY } from '../utils/graphql';
 
-export default function DeleteButton({ postId }) {
+export default function DeleteButton({ postId, commentId, callback }) {
 
     const [confirmOpen, setConfirmOpen] = useState(false);
 
-    const [deletePost] = useMutation(DELETE_POST_MUTAION, {
-        update: () => {
+    const mutation = commentId ? DELETE_COMMENT_MUTAION : DELETE_POST_MUTAION;
+
+    const [deletePostOrComment] = useMutation(mutation, {
+        update: (proxy) => {
             setConfirmOpen(false);
+
+            if (!commentId) {
+                const data = proxy.readQuery({ query: FETCH_POSTS_QUERY })
+
+                const newData = data.getPosts.filter((o) => o.id !== postId)
+                proxy.writeQuery({
+                    query: FETCH_POSTS_QUERY,
+                    data: {
+                        getPosts: [
+                            ...newData,
+                        ],
+                    },
+                })
+            }
+
+            if (callback) callback();
         },
-        variables: { postId }
+        variables: { postId, commentId }
     });
 
     return (
         <>
             <Button as="div" color="red" onClick={() => setConfirmOpen(true)} icon="trash" floated="right" />
-            <Confirm open={confirmOpen} onCancel={() => setConfirmOpen(false)} onConfirm={deletePost} />
+            <Confirm open={confirmOpen} onCancel={() => setConfirmOpen(false)} onConfirm={deletePostOrComment} />
         </>
     );
 }
@@ -25,5 +44,16 @@ export default function DeleteButton({ postId }) {
 const DELETE_POST_MUTAION = gql`
 mutation deletePost($postId:ID!){
     deletePost(postId:$postId)
+}
+`;
+
+const DELETE_COMMENT_MUTAION = gql`
+mutation deleteComment($postId:ID!, $commentId:ID!){
+    deleteComment(postId:$postId, commentId:$commentId){
+        id
+        comments{
+            id username createdAt body
+        }
+    }
 }
 `;
