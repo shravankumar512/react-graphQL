@@ -8,7 +8,7 @@ WORKDIR /code
 RUN npm config set registry https://registry.npmjs.org/
 
 # copy package.json into the container at /code folder
-COPY package*.json .
+COPY package*.json ./
 
 # install dependencies
 RUN echo "[npm] installing..." && \
