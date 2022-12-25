@@ -28,35 +28,35 @@ export default function MenuBar() {
             </Menu.Menu>
         </Menu>
     ) : (
-            <Menu pointing secondary size="massive" color="teal">
+        <Menu pointing secondary size="massive" color="teal">
+            <Menu.Item
+                name='home'
+                active={activeItem === 'home'}
+                onClick={handleItemClick}
+                as={Link}
+                to='/' />
+            <Menu.Menu position='right'>
                 <Menu.Item
-                    name='home'
-                    active={activeItem === 'home'}
+                    name='login'
+                    active={activeItem === 'login'}
                     onClick={handleItemClick}
                     as={Link}
-                    to='/' />
-                <Menu.Menu position='right'>
-                    <Menu.Item
-                        name='login'
-                        active={activeItem === 'login'}
-                        onClick={handleItemClick}
-                        as={Link}
-                        to='/login' />
-                    <Menu.Item
-                        name='register'
-                        active={activeItem === 'register'}
-                        onClick={handleItemClick}
-                        as={Link}
-                        to='/register' />
-                    <Menu.Item
+                    to='/login' />
+                <Menu.Item
+                    name='register'
+                    active={activeItem === 'register'}
+                    onClick={handleItemClick}
+                    as={Link}
+                    to='/register' />
+                {/* <Menu.Item
                         name='fileupload'
                         active={activeItem === 'fileupload'}
                         onClick={handleItemClick}
                         as={Link}
-                        to='/fileupload' />
-                </Menu.Menu>
-            </Menu>
-        );
+                        to='/fileupload' /> */}
+            </Menu.Menu>
+        </Menu>
+    );
 
 
     return menuBar;
